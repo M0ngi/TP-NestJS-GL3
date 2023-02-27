@@ -29,7 +29,6 @@ export class TodoModuleController {
 
     @Post()
     createTodo(@Body() body: CreateTodoDto){
-        console.log(body)
         return this.todoModuleService.createTodo(body);
     }
 }

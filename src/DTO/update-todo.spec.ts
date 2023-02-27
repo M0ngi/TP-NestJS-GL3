@@ -1,7 +1,7 @@
-import { CreateTodoTdo } from './create-todo';
+import { UpdateTodoTdo } from './update-todo';
 
-describe('CreateTodoTdo', () => {
+describe('UpdateTodoTdo', () => {
   it('should be defined', () => {
-    expect(new CreateTodoTdo()).toBeDefined();
+    expect(new UpdateTodoTdo()).toBeDefined();
   });
 });

@@ -34,7 +34,6 @@ let TodoModuleController = class TodoModuleController {
         return this.todoModuleService.updateTodo(body);
     }
     createTodo(body) {
-        console.log(body);
         return this.todoModuleService.createTodo(body);
     }
 };

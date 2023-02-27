@@ -12,11 +12,26 @@ const app_controller_1 = require("./app.controller");
 const app_service_1 = require("./app.service");
 const todo_module_module_1 = require("./todo-module/todo-module.module");
 const common_module_module_1 = require("./common-module/common-module.module");
+const typeorm_1 = require("@nestjs/typeorm");
+const TodoEntity_1 = require("./entities/TodoEntity");
 let AppModule = class AppModule {
 };
 AppModule = __decorate([
     (0, common_1.Module)({
-        imports: [todo_module_module_1.TodoModuleModule, common_module_module_1.CommonModuleModule],
+        imports: [
+            todo_module_module_1.TodoModuleModule,
+            common_module_module_1.CommonModuleModule,
+            typeorm_1.TypeOrmModule.forRoot({
+                type: "mysql",
+                host: "localhost",
+                port: 3306,
+                username: "root",
+                password: "root",
+                database: "mydb",
+                entities: [TodoEntity_1.default],
+                synchronize: true
+            })
+        ],
         controllers: [app_controller_1.AppController],
         providers: [app_service_1.AppService],
     })

@@ -1,13 +1,19 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, Version } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
 import { CreateTodoDto } from 'src/DTO/create-todo';
 import { UpdateTodoTdo } from 'src/DTO/update-todo';
+import TodoEntity from 'src/entities/TodoEntity';
 import { IT } from 'src/injection-token';
 import { Todo, TodoStatusEnum } from 'src/todo/todo';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class TodoModuleService {
     @Inject(IT.COMMON_MODULE) uuid;
-    constructor(){}
+    constructor(
+        @InjectRepository(TodoEntity)
+        private readonly todoRepository: Repository<TodoEntity>,
+    ){}
 
     private todos: Array<Todo> = [];
 
@@ -23,6 +29,17 @@ export class TodoModuleService {
         return todo;
     }
 
+    createTodoDb(data: CreateTodoDto): Todo{
+        const todo: Todo = new TodoEntity();
+        
+        todo.name = data.name ?? "";
+        todo.description = data.description ?? "";
+        todo.status = TodoStatusEnum.waiting;
+
+        this.todoRepository.save(todo)
+        return todo;
+    }
+
     getAll(): Array<Todo> {
         return this.todos
     }
@@ -31,11 +48,17 @@ export class TodoModuleService {
         return this.todos.find((e) => e.id == id);
     }
 
-    deleteById(id: string): Todo|undefined {
+    deleteById(id: string): Todo {
         const idx = this.todos.findIndex((e) => e.id == id);
-        if(idx == -1) return undefined;
+        if(idx == -1) throw "Todo doesn't exist";
 
         return this.todos.splice(idx, 1)[0];
+    }
+
+    async deleteByIdDb(id: string){
+        const todo = await this.todoRepository.softDelete({id})
+
+        return todo;
     }
 
     updateTodo(data: UpdateTodoTdo){
@@ -48,6 +71,17 @@ export class TodoModuleService {
         todo.status = data.status ?? this.todos[idx].status;
 
         this.todos.splice(idx, 1, todo);
+        return todo;
+    }
+
+    async updateTodoDb(data: UpdateTodoTdo) {
+        const todo = await this.todoRepository.findOneBy({id: data.id})
+
+        todo.name = data.name ?? todo.name;
+        todo.description = data.description ?? todo.description;
+        todo.status = data.status ?? todo.status;
+
+        this.todoRepository.save(todo);
         return todo;
     }
 }

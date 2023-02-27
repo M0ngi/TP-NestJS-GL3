@@ -1,7 +1,7 @@
-import { CreateTodoTdo } from './create-todo';
+import { CreateTodoDto } from './create-todo';
 
-describe('CreateTodoTdo', () => {
+describe('CreateTodoDto', () => {
   it('should be defined', () => {
-    expect(new CreateTodoTdo()).toBeDefined();
+    expect(new CreateTodoDto()).toBeDefined();
   });
 });

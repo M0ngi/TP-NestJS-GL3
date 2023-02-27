@@ -8,13 +8,20 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+var __param = (this && this.__param) || function (paramIndex, decorator) {
+    return function (target, key) { decorator(target, key, paramIndex); }
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.TodoModuleService = void 0;
 const common_1 = require("@nestjs/common");
+const typeorm_1 = require("@nestjs/typeorm");
+const TodoEntity_1 = require("../entities/TodoEntity");
 const injection_token_1 = require("../injection-token");
 const todo_1 = require("../todo/todo");
+const typeorm_2 = require("typeorm");
 let TodoModuleService = class TodoModuleService {
-    constructor() {
+    constructor(todoRepository) {
+        this.todoRepository = todoRepository;
         this.todos = [];
     }
     createTodo(data) {
@@ -28,6 +35,15 @@ let TodoModuleService = class TodoModuleService {
         this.todos.push(todo);
         return todo;
     }
+    createTodoDb(data) {
+        var _a, _b;
+        const todo = new TodoEntity_1.default();
+        todo.name = (_a = data.name) !== null && _a !== void 0 ? _a : "";
+        todo.description = (_b = data.description) !== null && _b !== void 0 ? _b : "";
+        todo.status = todo_1.TodoStatusEnum.waiting;
+        this.todoRepository.save(todo);
+        return todo;
+    }
     getAll() {
         return this.todos;
     }
@@ -37,8 +53,12 @@ let TodoModuleService = class TodoModuleService {
     deleteById(id) {
         const idx = this.todos.findIndex((e) => e.id == id);
         if (idx == -1)
-            return undefined;
+            throw "Todo doesn't exist";
         return this.todos.splice(idx, 1)[0];
+    }
+    async deleteByIdDb(id) {
+        const todo = await this.todoRepository.softDelete({ id });
+        return todo;
     }
     updateTodo(data) {
         var _a, _b, _c;
@@ -51,6 +71,15 @@ let TodoModuleService = class TodoModuleService {
         this.todos.splice(idx, 1, todo);
         return todo;
     }
+    async updateTodoDb(data) {
+        var _a, _b, _c;
+        const todo = await this.todoRepository.findOneBy({ id: data.id });
+        todo.name = (_a = data.name) !== null && _a !== void 0 ? _a : todo.name;
+        todo.description = (_b = data.description) !== null && _b !== void 0 ? _b : todo.description;
+        todo.status = (_c = data.status) !== null && _c !== void 0 ? _c : todo.status;
+        this.todoRepository.save(todo);
+        return todo;
+    }
 };
 __decorate([
     (0, common_1.Inject)(injection_token_1.IT.COMMON_MODULE),
@@ -58,7 +87,8 @@ __decorate([
 ], TodoModuleService.prototype, "uuid", void 0);
 TodoModuleService = __decorate([
     (0, common_1.Injectable)(),
-    __metadata("design:paramtypes", [])
+    __param(0, (0, typeorm_1.InjectRepository)(TodoEntity_1.default)),
+    __metadata("design:paramtypes", [typeorm_2.Repository])
 ], TodoModuleService);
 exports.TodoModuleService = TodoModuleService;
 //# sourceMappingURL=todo-module.service.js.map
