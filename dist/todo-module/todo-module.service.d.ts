@@ -14,6 +14,7 @@ export declare class TodoModuleService {
     getById(id: string): Todo | undefined;
     deleteById(id: string): Todo;
     deleteByIdDb(id: string): Promise<import("typeorm").UpdateResult>;
+    restoreById(id: string): Promise<import("typeorm").UpdateResult>;
     updateTodo(data: UpdateTodoTdo): Todo;
-    updateTodoDb(data: UpdateTodoTdo): Promise<TodoEntity>;
+    updateTodoDb(data: UpdateTodoTdo): Promise<import("typeorm").UpdateResult>;
 }

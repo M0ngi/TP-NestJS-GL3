@@ -55,10 +55,12 @@ export class TodoModuleService {
         return this.todos.splice(idx, 1)[0];
     }
 
-    async deleteByIdDb(id: string){
-        const todo = await this.todoRepository.softDelete({id})
+    deleteByIdDb(id: string){
+        return this.todoRepository.softDelete(id);
+    }
 
-        return todo;
+    restoreById(id: string){
+        return this.todoRepository.restore(id);
     }
 
     updateTodo(data: UpdateTodoTdo){
@@ -75,13 +77,6 @@ export class TodoModuleService {
     }
 
     async updateTodoDb(data: UpdateTodoTdo) {
-        const todo = await this.todoRepository.findOneBy({id: data.id})
-
-        todo.name = data.name ?? todo.name;
-        todo.description = data.description ?? todo.description;
-        todo.status = data.status ?? todo.status;
-
-        this.todoRepository.save(todo);
-        return todo;
+        return this.todoRepository.update(data.id, data);
     }
 }

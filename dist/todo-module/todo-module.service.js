@@ -56,9 +56,11 @@ let TodoModuleService = class TodoModuleService {
             throw "Todo doesn't exist";
         return this.todos.splice(idx, 1)[0];
     }
-    async deleteByIdDb(id) {
-        const todo = await this.todoRepository.softDelete({ id });
-        return todo;
+    deleteByIdDb(id) {
+        return this.todoRepository.softDelete(id);
+    }
+    restoreById(id) {
+        return this.todoRepository.restore(id);
     }
     updateTodo(data) {
         var _a, _b, _c;
@@ -72,13 +74,7 @@ let TodoModuleService = class TodoModuleService {
         return todo;
     }
     async updateTodoDb(data) {
-        var _a, _b, _c;
-        const todo = await this.todoRepository.findOneBy({ id: data.id });
-        todo.name = (_a = data.name) !== null && _a !== void 0 ? _a : todo.name;
-        todo.description = (_b = data.description) !== null && _b !== void 0 ? _b : todo.description;
-        todo.status = (_c = data.status) !== null && _c !== void 0 ? _c : todo.status;
-        this.todoRepository.save(todo);
-        return todo;
+        return this.todoRepository.update(data.id, data);
     }
 };
 __decorate([

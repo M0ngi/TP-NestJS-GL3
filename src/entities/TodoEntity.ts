@@ -7,12 +7,12 @@ export default class TodoEntity{
     id: string;
 
     @Column({
-        type: "string"
+        type: "varchar"
     })
     name: string;
 
     @Column({
-        type: "string"
+        type: "varchar"
     })
     description: string;
 
