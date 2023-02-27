@@ -1,5 +1,5 @@
 import { Body, Controller, Delete, Get, Inject, Param, Patch, Post, Req } from '@nestjs/common';
-import { CreateTodoTdo } from 'src/DTO/create-todo';
+import { CreateTodoDto } from 'src/DTO/create-todo';
 import { UpdateTodoTdo } from 'src/DTO/update-todo';
 import { TodoModuleService } from './todo-module.service';
 
@@ -28,7 +28,8 @@ export class TodoModuleController {
     }
 
     @Post()
-    createTodo(@Body() body: CreateTodoTdo){
+    createTodo(@Body() body: CreateTodoDto){
+        console.log(body)
         return this.todoModuleService.createTodo(body);
     }
 }

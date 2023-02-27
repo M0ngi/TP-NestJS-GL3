@@ -1,7 +1,8 @@
 import { TodoStatusEnum } from "src/todo/todo";
-export declare class UpdateTodoTdo {
+import { CreateTodoDto } from "./create-todo";
+declare const UpdateTodoTdo_base: import("@nestjs/mapped-types").MappedType<Partial<CreateTodoDto>>;
+export declare class UpdateTodoTdo extends UpdateTodoTdo_base {
     id: string;
-    name?: string;
-    description?: string;
     status?: TodoStatusEnum;
 }
+export {};

@@ -34,6 +34,7 @@ let TodoModuleController = class TodoModuleController {
         return this.todoModuleService.updateTodo(body);
     }
     createTodo(body) {
+        console.log(body);
         return this.todoModuleService.createTodo(body);
     }
 };
@@ -68,7 +69,7 @@ __decorate([
     (0, common_1.Post)(),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [create_todo_1.CreateTodoTdo]),
+    __metadata("design:paramtypes", [create_todo_1.CreateTodoDto]),
     __metadata("design:returntype", void 0)
 ], TodoModuleController.prototype, "createTodo", null);
 TodoModuleController = __decorate([

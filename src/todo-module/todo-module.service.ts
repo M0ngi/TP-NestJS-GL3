@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { CreateTodoTdo } from 'src/DTO/create-todo';
+import { CreateTodoDto } from 'src/DTO/create-todo';
 import { UpdateTodoTdo } from 'src/DTO/update-todo';
 import { IT } from 'src/injection-token';
 import { Todo, TodoStatusEnum } from 'src/todo/todo';
@@ -11,7 +11,7 @@ export class TodoModuleService {
 
     private todos: Array<Todo> = [];
 
-    createTodo(data: CreateTodoTdo): Todo{
+    createTodo(data: CreateTodoDto): Todo{
         const todo: Todo = new Todo();
         
         todo.id = this.uuid();
