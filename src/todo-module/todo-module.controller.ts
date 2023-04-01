@@ -33,6 +33,12 @@ export class TodoModuleController {
         return this.todoModuleService.updateTodo(body);
     }
 
+    @Version("2")
+    @Patch()
+    updateTodoDb(@Body() body: UpdateTodoTdo){
+        return this.todoModuleService.updateTodoDb(body);
+    }
+
     @Post()
     createTodo(@Body() body: CreateTodoDto){
         return this.todoModuleService.createTodo(body);

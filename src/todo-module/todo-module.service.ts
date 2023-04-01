@@ -33,8 +33,8 @@ export class TodoModuleService {
     createTodoDb(data: CreateTodoDto){
         const todo = new TodoEntity();
         
-        todo.name = data.name ?? "";
-        todo.description = data.description ?? "";
+        todo.name = data.name;
+        todo.description = data.description;
         todo.status = TodoStatusEnum.waiting;
 
         return this.todoRepository.save(todo);
