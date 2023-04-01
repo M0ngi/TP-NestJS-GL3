@@ -1,5 +1,6 @@
-import { Inject, Injectable, Version } from '@nestjs/common';
+import { Inject, Injectable, NotFoundException, Version } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { NotFoundError } from 'rxjs';
 import { CreateTodoDto } from 'src/DTO/create-todo';
 import { UpdateTodoTdo } from 'src/DTO/update-todo';
 import TodoEntity from 'src/entities/TodoEntity';
@@ -29,23 +30,30 @@ export class TodoModuleService {
         return todo;
     }
 
-    createTodoDb(data: CreateTodoDto): Todo{
-        const todo: Todo = new TodoEntity();
+    createTodoDb(data: CreateTodoDto){
+        const todo = new TodoEntity();
         
         todo.name = data.name ?? "";
         todo.description = data.description ?? "";
         todo.status = TodoStatusEnum.waiting;
 
-        this.todoRepository.save(todo)
-        return todo;
+        return this.todoRepository.save(todo);
     }
 
     getAll(): Array<Todo> {
         return this.todos
     }
 
+    getAllDb(){
+        return this.todoRepository.find();
+    }
+
     getById(id: string): Todo|undefined {
         return this.todos.find((e) => e.id == id);
+    }
+
+    getByIdDb(id: string) {
+        return this.todoRepository.findOneBy({id})
     }
 
     deleteById(id: string): Todo {
@@ -55,8 +63,13 @@ export class TodoModuleService {
         return this.todos.splice(idx, 1)[0];
     }
 
-    deleteByIdDb(id: string){
-        return this.todoRepository.softDelete(id);
+    async deleteByIdDb(id: string){
+        const todo = await this.todoRepository.findOneBy({id})
+        console.log(id)
+        if(!todo) throw new NotFoundException("Todo doesn't exist.")
+
+        this.todoRepository.softDelete(id)
+        return todo;
     }
 
     restoreById(id: string){
@@ -77,6 +90,21 @@ export class TodoModuleService {
     }
 
     async updateTodoDb(data: UpdateTodoTdo) {
-        return this.todoRepository.update(data.id, data);
+        const elem = await this.todoRepository.findOneBy({id: data.id});
+        if(!elem) throw new NotFoundException("Todo doesn't exist.")
+
+        elem.description = data.description ?? elem.description;
+        elem.name = data.name ?? elem.name;
+        elem.status = data.status ?? elem.status;
+
+        return this.todoRepository.save(elem);
+    }
+
+    async getStats(){
+        return {
+            actif: await this.todoRepository.countBy({status: TodoStatusEnum.actif}),
+            done: await this.todoRepository.countBy({status: TodoStatusEnum.done}),
+            waiting: await this.todoRepository.countBy({status: TodoStatusEnum.waiting}),
+        }
     }
 }

@@ -6,6 +6,9 @@ const app_module_1 = require("./app.module");
 async function bootstrap() {
     const app = await core_1.NestFactory.create(app_module_1.AppModule);
     app.useGlobalPipes(new common_1.ValidationPipe({ transform: true }));
+    app.enableVersioning({
+        type: common_1.VersioningType.URI
+    });
     await app.listen(3000);
 }
 bootstrap();

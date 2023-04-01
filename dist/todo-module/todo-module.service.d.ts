@@ -9,12 +9,19 @@ export declare class TodoModuleService {
     constructor(todoRepository: Repository<TodoEntity>);
     private todos;
     createTodo(data: CreateTodoDto): Todo;
-    createTodoDb(data: CreateTodoDto): Todo;
+    createTodoDb(data: CreateTodoDto): Promise<TodoEntity>;
     getAll(): Array<Todo>;
+    getAllDb(): Promise<TodoEntity[]>;
     getById(id: string): Todo | undefined;
+    getByIdDb(id: string): Promise<TodoEntity>;
     deleteById(id: string): Todo;
-    deleteByIdDb(id: string): Promise<import("typeorm").UpdateResult>;
+    deleteByIdDb(id: string): Promise<TodoEntity>;
     restoreById(id: string): Promise<import("typeorm").UpdateResult>;
     updateTodo(data: UpdateTodoTdo): Todo;
-    updateTodoDb(data: UpdateTodoTdo): Promise<import("typeorm").UpdateResult>;
+    updateTodoDb(data: UpdateTodoTdo): Promise<TodoEntity>;
+    getStats(): Promise<{
+        actif: number;
+        done: number;
+        waiting: number;
+    }>;
 }

@@ -24,6 +24,9 @@ let TodoModuleController = class TodoModuleController {
     getTodos() {
         return this.todoModuleService.getAll();
     }
+    getTodosDb() {
+        return this.todoModuleService.getAllDb();
+    }
     getTodo(id) {
         return this.todoModuleService.getById(id);
     }
@@ -36,6 +39,21 @@ let TodoModuleController = class TodoModuleController {
     createTodo(body) {
         return this.todoModuleService.createTodo(body);
     }
+    createTodoDb(body) {
+        return this.todoModuleService.createTodoDb(body);
+    }
+    getStatsTodo() {
+        return this.todoModuleService.getStats();
+    }
+    getTodoDb(id) {
+        return this.todoModuleService.getByIdDb(id);
+    }
+    deleteTodoDb(id) {
+        return this.todoModuleService.deleteByIdDb(id);
+    }
+    restoreTodoDb(id) {
+        return this.todoModuleService.restoreById(id);
+    }
 };
 __decorate([
     (0, common_1.Get)(),
@@ -43,6 +61,13 @@ __decorate([
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", void 0)
 ], TodoModuleController.prototype, "getTodos", null);
+__decorate([
+    (0, common_1.Get)(),
+    (0, common_1.Version)("2"),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", void 0)
+], TodoModuleController.prototype, "getTodosDb", null);
 __decorate([
     (0, common_1.Get)('/:id'),
     __param(0, (0, common_1.Param)('id')),
@@ -71,6 +96,45 @@ __decorate([
     __metadata("design:paramtypes", [create_todo_1.CreateTodoDto]),
     __metadata("design:returntype", void 0)
 ], TodoModuleController.prototype, "createTodo", null);
+__decorate([
+    (0, common_1.Version)("2"),
+    (0, common_1.Post)(),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [create_todo_1.CreateTodoDto]),
+    __metadata("design:returntype", void 0)
+], TodoModuleController.prototype, "createTodoDb", null);
+__decorate([
+    (0, common_1.Get)("/stats"),
+    (0, common_1.Version)("2"),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", void 0)
+], TodoModuleController.prototype, "getStatsTodo", null);
+__decorate([
+    (0, common_1.Get)('/:id'),
+    (0, common_1.Version)("2"),
+    __param(0, (0, common_1.Param)('id')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", void 0)
+], TodoModuleController.prototype, "getTodoDb", null);
+__decorate([
+    (0, common_1.Delete)('/:id'),
+    (0, common_1.Version)("2"),
+    __param(0, (0, common_1.Param)('id')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", void 0)
+], TodoModuleController.prototype, "deleteTodoDb", null);
+__decorate([
+    (0, common_1.Version)("2"),
+    (0, common_1.Post)("/restore/:id"),
+    __param(0, (0, common_1.Param)('id')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", void 0)
+], TodoModuleController.prototype, "restoreTodoDb", null);
 TodoModuleController = __decorate([
     (0, common_1.Controller)('/todo'),
     __metadata("design:paramtypes", [todo_module_service_1.TodoModuleService])

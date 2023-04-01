@@ -41,14 +41,19 @@ let TodoModuleService = class TodoModuleService {
         todo.name = (_a = data.name) !== null && _a !== void 0 ? _a : "";
         todo.description = (_b = data.description) !== null && _b !== void 0 ? _b : "";
         todo.status = todo_1.TodoStatusEnum.waiting;
-        this.todoRepository.save(todo);
-        return todo;
+        return this.todoRepository.save(todo);
     }
     getAll() {
         return this.todos;
     }
+    getAllDb() {
+        return this.todoRepository.find();
+    }
     getById(id) {
         return this.todos.find((e) => e.id == id);
+    }
+    getByIdDb(id) {
+        return this.todoRepository.findOneBy({ id });
     }
     deleteById(id) {
         const idx = this.todos.findIndex((e) => e.id == id);
@@ -56,8 +61,13 @@ let TodoModuleService = class TodoModuleService {
             throw "Todo doesn't exist";
         return this.todos.splice(idx, 1)[0];
     }
-    deleteByIdDb(id) {
-        return this.todoRepository.softDelete(id);
+    async deleteByIdDb(id) {
+        const todo = await this.todoRepository.findOneBy({ id });
+        console.log(id);
+        if (!todo)
+            throw new common_1.NotFoundException("Todo doesn't exist.");
+        this.todoRepository.softDelete(id);
+        return todo;
     }
     restoreById(id) {
         return this.todoRepository.restore(id);
@@ -74,7 +84,21 @@ let TodoModuleService = class TodoModuleService {
         return todo;
     }
     async updateTodoDb(data) {
-        return this.todoRepository.update(data.id, data);
+        var _a, _b, _c;
+        const elem = await this.todoRepository.findOneBy({ id: data.id });
+        if (!elem)
+            throw new common_1.NotFoundException("Todo doesn't exist.");
+        elem.description = (_a = data.description) !== null && _a !== void 0 ? _a : elem.description;
+        elem.name = (_b = data.name) !== null && _b !== void 0 ? _b : elem.name;
+        elem.status = (_c = data.status) !== null && _c !== void 0 ? _c : elem.status;
+        return this.todoRepository.save(elem);
+    }
+    async getStats() {
+        return {
+            actif: await this.todoRepository.countBy({ status: todo_1.TodoStatusEnum.actif }),
+            done: await this.todoRepository.countBy({ status: todo_1.TodoStatusEnum.done }),
+            waiting: await this.todoRepository.countBy({ status: todo_1.TodoStatusEnum.waiting }),
+        };
     }
 };
 __decorate([
