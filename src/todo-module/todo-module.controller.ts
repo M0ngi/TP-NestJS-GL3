@@ -1,5 +1,8 @@
-import { Body, Controller, Delete, Get, Inject, Param, Patch, Post, Req, Version } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Query, Version } from '@nestjs/common';
+import { MergeType } from 'mongoose';
 import { CreateTodoDto } from 'src/DTO/create-todo';
+import { Pagination } from 'src/DTO/pagination';
+import { SearchTodoDto } from 'src/DTO/search-todo';
 import { UpdateTodoTdo } from 'src/DTO/update-todo';
 import { TodoModuleService } from './todo-module.service';
 
@@ -14,8 +17,20 @@ export class TodoModuleController {
 
     @Get()
     @Version("2")
-    getTodosDb(){
-        return this.todoModuleService.getAllDb()
+    getTodosDb(@Query() queryParam: MergeType<Pagination, SearchTodoDto>){
+        return this.todoModuleService.getAllDb(queryParam)
+    }
+
+    @Get("/stats")
+    @Version("2")
+    getStatsTodoDb(){
+        return this.todoModuleService.getStats();
+    }
+
+    @Version("2")
+    @Post("/restore/:id")
+    restoreTodoDb(@Param('id') id: string){
+        return this.todoModuleService.restoreById(id)
     }
 
     @Get('/:id')
@@ -23,9 +38,21 @@ export class TodoModuleController {
         return this.todoModuleService.getById(id);
     }
 
+    @Get('/:id')
+    @Version("2")
+    getTodoDb(@Param('id') id: string){
+        return this.todoModuleService.getByIdDb(id);
+    }
+
     @Delete('/:id')
     deleteTodo(@Param('id') id: string){
         return this.todoModuleService.deleteById(id);
+    }
+
+    @Delete('/:id')
+    @Version("2")
+    deleteTodoDb(@Param('id') id: string){
+        return this.todoModuleService.deleteByIdDb(id);
     }
 
     @Patch()
@@ -48,29 +75,5 @@ export class TodoModuleController {
     @Post()
     createTodoDb(@Body() body: CreateTodoDto){
         return this.todoModuleService.createTodoDb(body);
-    }
-
-    @Get("/stats")
-    @Version("2")
-    getStatsTodo(){
-        return this.todoModuleService.getStats();
-    }
-
-    @Get('/:id')
-    @Version("2")
-    getTodoDb(@Param('id') id: string){
-        return this.todoModuleService.getByIdDb(id);
-    }
-
-    @Delete('/:id')
-    @Version("2")
-    deleteTodoDb(@Param('id') id: string){
-        return this.todoModuleService.deleteByIdDb(id);
-    }
-
-    @Version("2")
-    @Post("/restore/:id")
-    restoreTodoDb(@Param('id') id: string){
-        return this.todoModuleService.restoreById(id)
     }
 }

@@ -1,8 +1,9 @@
 import { TodoStatusEnum } from "src/todo/todo";
-import { Column, CreateDateColumn, DeleteDateColumn, Entity, PrimaryColumn, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import WithDate from "./WithDate";
 
 @Entity("tdo")
-export default class TodoEntity{
+export default class TodoEntity extends WithDate{
     @PrimaryGeneratedColumn('uuid')
     id: string;
 
@@ -15,17 +16,6 @@ export default class TodoEntity{
         type: "varchar"
     })
     description: string;
-
-    @CreateDateColumn({
-        update: false
-    })
-    createdAt: Date;
-
-    @DeleteDateColumn()
-    deletedAt: Date;
-
-    @UpdateDateColumn()
-    updatedAt: Date;
 
     @Column({
         type: "enum",

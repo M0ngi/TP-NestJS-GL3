@@ -1,12 +1,29 @@
-import { Inject, Injectable, NotFoundException, Version } from '@nestjs/common';
+import { BadRequestException, Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { NotFoundError } from 'rxjs';
+import { MergeType } from 'mongoose';
 import { CreateTodoDto } from 'src/DTO/create-todo';
+import { Pagination } from 'src/DTO/pagination';
+import { SearchTodoDto } from 'src/DTO/search-todo';
 import { UpdateTodoTdo } from 'src/DTO/update-todo';
 import TodoEntity from 'src/entities/TodoEntity';
 import { IT } from 'src/injection-token';
 import { Todo, TodoStatusEnum } from 'src/todo/todo';
-import { Repository } from 'typeorm';
+import { Repository, SelectQueryBuilder } from 'typeorm';
+
+class APIfeatures {
+    constructor(
+        public query: SelectQueryBuilder<TodoEntity>, 
+        private queryString: Pagination,
+    ){}
+
+    paginating(){
+        const page = this.queryString.page * 1 || 1
+        const limit = this.queryString.limit * 1 || 9
+        const skip = (page - 1) * limit
+        this.query = this.query.offset(skip).limit(limit)
+        return this;
+    }
+}
 
 @Injectable()
 export class TodoModuleService {
@@ -44,16 +61,24 @@ export class TodoModuleService {
         return this.todos
     }
 
-    getAllDb(){
-        return this.todoRepository.find();
+    getAllDb({status, data, ...pagination}: MergeType<Pagination, SearchTodoDto>){
+        const qb = this.todoRepository.createQueryBuilder("todo");
+        if(data) 
+            qb.where("todo.name Like :data", { data: '%' + data + '%' })
+            .orWhere("todo.description Like :data", { data: '%' + data + '%' })
+        if(status) qb.orWhere("todo.status= :statusParam", { statusParam: status });
+        const feature = new APIfeatures(qb, pagination).paginating();
+        return feature.query.getMany();
     }
 
     getById(id: string): Todo|undefined {
         return this.todos.find((e) => e.id == id);
     }
 
-    getByIdDb(id: string) {
-        return this.todoRepository.findOneBy({id})
+    async getByIdDb(id: string) {
+        const todo = await this.todoRepository.findOne({ where: [{ id: id }] });
+        if(!todo) throw new BadRequestException("ToDo Not Found");
+        return todo
     }
 
     deleteById(id: string): Todo {
