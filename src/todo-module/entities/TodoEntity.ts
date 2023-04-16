@@ -1,4 +1,4 @@
-import { TodoStatusEnum } from "src/todo/todo";
+import { TodoStatusEnum } from "src/todo-module/todo/todo";
 import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 import DatedEntity from "./DatedEntity";
 
