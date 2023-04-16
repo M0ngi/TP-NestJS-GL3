@@ -1,9 +1,9 @@
 import { TodoStatusEnum } from "src/todo/todo";
 import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
-import WithDate from "./WithDate";
+import DatedEntity from "./DatedEntity";
 
 @Entity("tdo")
-export default class TodoEntity extends WithDate{
+export default class TodoEntity extends DatedEntity{
     @PrimaryGeneratedColumn('uuid')
     id: string;
 

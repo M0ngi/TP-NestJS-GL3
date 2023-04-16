@@ -1,6 +1,6 @@
 import { CreateDateColumn, DeleteDateColumn, UpdateDateColumn } from "typeorm";
 
-export default class WithDate{
+export default class DatedEntity{
     @CreateDateColumn({
         update: false
     })
