@@ -4,7 +4,7 @@ import { AppService } from './app.service';
 import { TodoModuleModule } from './todo-module/todo-module.module';
 import { CommonModuleModule } from './common-module/common-module.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import TodoEntity from './entities/TodoEntity';
+import TodoEntity from './todo-module/entities/TodoEntity';
 
 @Module({
   imports: [
@@ -18,7 +18,7 @@ import TodoEntity from './entities/TodoEntity';
       database: "mydb",
       entities: [TodoEntity],
       synchronize: true
-    })
+    }),
   ],
   controllers: [AppController],
   providers: [AppService],

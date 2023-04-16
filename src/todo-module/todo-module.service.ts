@@ -1,13 +1,12 @@
 import { BadRequestException, Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { MergeType } from 'mongoose';
-import { CreateTodoDto } from 'src/DTO/create-todo';
-import { Pagination } from 'src/DTO/pagination';
-import { SearchTodoDto } from 'src/DTO/search-todo';
-import { UpdateTodoTdo } from 'src/DTO/update-todo';
-import TodoEntity from 'src/entities/TodoEntity';
+import { CreateTodoDto } from 'src/todo-module/DTO/create-todo';
+import { Pagination } from 'src/todo-module/DTO/pagination';
+import { SearchTodoDto } from 'src/todo-module/DTO/search-todo';
+import { UpdateTodoTdo } from 'src/todo-module/DTO/update-todo';
+import TodoEntity from 'src/todo-module/entities/TodoEntity';
 import { IT } from 'src/injection-token';
-import { Todo, TodoStatusEnum } from 'src/todo/todo';
+import { Todo, TodoStatusEnum } from 'src/todo-module/todo/todo';
 import { Repository, SelectQueryBuilder } from 'typeorm';
 
 class APIfeatures {
@@ -61,7 +60,7 @@ export class TodoModuleService {
         return this.todos
     }
 
-    getAllDb({status, data, ...pagination}: MergeType<Pagination, SearchTodoDto>){
+    getAllDb({status, data, ...pagination}: Omit<Pagination, keyof SearchTodoDto> & SearchTodoDto){
         const qb = this.todoRepository.createQueryBuilder("todo");
         if(data) 
             qb.where("todo.name Like :data", { data: '%' + data + '%' })

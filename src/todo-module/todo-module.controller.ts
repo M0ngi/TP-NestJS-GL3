@@ -1,9 +1,8 @@
 import { Body, Controller, Delete, Get, Param, Patch, Post, Query, Version } from '@nestjs/common';
-import { MergeType } from 'mongoose';
-import { CreateTodoDto } from 'src/DTO/create-todo';
-import { Pagination } from 'src/DTO/pagination';
-import { SearchTodoDto } from 'src/DTO/search-todo';
-import { UpdateTodoTdo } from 'src/DTO/update-todo';
+import { CreateTodoDto } from 'src/todo-module/DTO/create-todo';
+import { Pagination } from 'src/todo-module/DTO/pagination';
+import { SearchTodoDto } from 'src/todo-module/DTO/search-todo';
+import { UpdateTodoTdo } from 'src/todo-module/DTO/update-todo';
 import { TodoModuleService } from './todo-module.service';
 
 @Controller('/todo')
@@ -17,7 +16,7 @@ export class TodoModuleController {
 
     @Get()
     @Version("2")
-    getTodosDb(@Query() queryParam: MergeType<Pagination, SearchTodoDto>){
+    getTodosDb(@Query() queryParam: Omit<Pagination, keyof SearchTodoDto> & SearchTodoDto){
         return this.todoModuleService.getAllDb(queryParam)
     }
 

@@ -1,6 +1,6 @@
 import { IsEnum, IsOptional, IsString, MaxLength } from "class-validator";
 import ErrorMessage from "src/errors/error-message";
-import { TodoStatusEnum } from "src/todo/todo";
+import { TodoStatusEnum } from "src/todo-module/todo/todo";
 
 export class SearchTodoDto {
     @IsOptional()
