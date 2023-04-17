@@ -1,6 +1,7 @@
 import { Cv } from "src/cvs/entities/cv.entity";
-import { Column, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
+@Entity("user")
 export class UserEntity {
     @PrimaryGeneratedColumn('uuid')
     id: string;

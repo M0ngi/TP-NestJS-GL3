@@ -10,6 +10,9 @@ import { ConfigModule } from '@nestjs/config';
 import { UsersModule } from './users/users.module';
 import { CvsModule } from './cvs/cvs.module';
 import { SkillsModule } from './skills/skills.module';
+import { UserEntity } from './users/entities/user.entity';
+import { Cv } from './cvs/entities/cv.entity';
+import { Skill } from './skills/entities/skill.entity';
 
 @Module({
   imports: [
@@ -24,7 +27,7 @@ import { SkillsModule } from './skills/skills.module';
       username: "root",
       password: "root",
       database: "mydb",
-      entities: [TodoEntity],
+      entities: [TodoEntity, UserEntity, Cv, Skill],
       synchronize: true
     }),
     UsersModule,

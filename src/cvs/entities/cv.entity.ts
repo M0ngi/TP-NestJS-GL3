@@ -1,7 +1,8 @@
 import { Skill } from "src/skills/entities/skill.entity";
 import { UserEntity } from "src/users/entities/user.entity";
-import { Column, JoinTable, ManyToMany, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinTable, ManyToMany, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 
+@Entity("cv")
 export class Cv {
     @PrimaryGeneratedColumn('uuid')
     id: string;
