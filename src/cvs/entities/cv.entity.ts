@@ -42,8 +42,6 @@ export class Cv {
         (user) => user.cvs,
         {
           cascade: ['insert', 'update'],
-          nullable: true,
-          eager: true
         }
     )
     user: UserEntity;

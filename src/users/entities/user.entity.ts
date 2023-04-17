@@ -26,6 +26,6 @@ export class UserEntity {
     })
     hash: string;
 
-    @OneToMany(type => Cv, cv => cv.user)
+    @OneToMany(type => Cv, cv => cv.user, {eager: true})
     cvs: Cv[]
 }
