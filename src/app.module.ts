@@ -45,6 +45,7 @@ export class AppModule implements NestModule {
         "v2/todo",
         "cvs",
         "skills",
+        "users",
       )
   }
   
