@@ -1,4 +1,5 @@
-import { Column, PrimaryGeneratedColumn } from "typeorm";
+import { Cv } from "src/cvs/entities/cv.entity";
+import { Column, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
 export class UserEntity {
     @PrimaryGeneratedColumn('uuid')
@@ -23,4 +24,7 @@ export class UserEntity {
         type: "varchar"
     })
     hash: string;
+
+    @OneToMany(type => Cv, cv => cv.user)
+    cvs: Cv[]
 }

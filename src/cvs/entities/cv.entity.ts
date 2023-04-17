@@ -1,5 +1,6 @@
 import { Skill } from "src/skills/entities/skill.entity";
-import { Column, JoinTable, ManyToMany, PrimaryGeneratedColumn } from "typeorm";
+import { UserEntity } from "src/users/entities/user.entity";
+import { Column, JoinTable, ManyToMany, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 
 export class Cv {
     @PrimaryGeneratedColumn('uuid')
@@ -34,6 +35,17 @@ export class Cv {
         type: "varchar"
     })
     path: string;
+
+    @ManyToOne(
+        () => UserEntity,
+        (user) => user.cvs,
+        {
+          cascade: ['insert', 'update'],
+          nullable: true,
+          eager: true
+        }
+    )
+    user: UserEntity;
 
     @ManyToMany(type => Skill, skill => skill.cvs, { eager: true })
     @JoinTable()

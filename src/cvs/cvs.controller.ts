@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Request } from '@nestjs/common';
 import { CvsService } from './cvs.service';
 import { AddSkillCvDto } from './dto/add-skill-cv.dto';
 import { CreateCvDto } from './dto/create-cv.dto';
@@ -9,8 +9,8 @@ export class CvsController {
   constructor(private readonly cvsService: CvsService) {}
 
   @Post()
-  create(@Body() createCvDto: CreateCvDto) {
-    return this.cvsService.create(createCvDto);
+  create(@Body() createCvDto: CreateCvDto, @Request() req: Request) {
+    return this.cvsService.create(createCvDto, req['user']);
   }
 
   @Get()

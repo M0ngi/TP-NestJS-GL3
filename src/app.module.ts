@@ -37,7 +37,12 @@ import { SkillsModule } from './skills/skills.module';
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
     consumer.apply(AuthentificationMiddleware)
-      .forRoutes("todo", "v2/todo")
+      .forRoutes(
+        "todo", 
+        "v2/todo",
+        "cvs",
+        "skills",
+      )
   }
   
 }
