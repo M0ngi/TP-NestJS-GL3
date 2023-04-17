@@ -8,6 +8,8 @@ import TodoEntity from './todo-module/entities/TodoEntity';
 import { AuthentificationMiddleware } from './authentification/authentification.middleware';
 import { ConfigModule } from '@nestjs/config';
 import { UsersModule } from './users/users.module';
+import { CvsModule } from './cvs/cvs.module';
+import { SkillsModule } from './skills/skills.module';
 
 @Module({
   imports: [
@@ -26,6 +28,8 @@ import { UsersModule } from './users/users.module';
       synchronize: true
     }),
     UsersModule,
+    CvsModule,
+    SkillsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
